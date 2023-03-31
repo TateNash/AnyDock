@@ -1,0 +1,17 @@
+{
+    "qtConfigure.qtKitDir": "d:/Program/Qt/6.4.3/msvc2019_64",
+    "files.associations": {
+        "qscreen": "cpp",
+        "qdebug": "cpp",
+        "qcontextmenuevent": "cpp",
+        "qsystemtrayicon": "cpp",
+        "qmainwindow": "cpp",
+        "qscopedpointer": "cpp",
+        "qlabel": "cpp",
+        "qdatetime": "cpp",
+        "qdockwidget": "cpp",
+        "memory": "cpp",
+        "qlcdnumber": "cpp",
+        "qwidget": "cpp"
+    }
+}

@@ -1,0 +1,6 @@
+<RCC>
+  <qresource prefix="/">
+    <file>anydock.qrc</file>
+    <file>icon/exe.png</file>
+  </qresource>
+</RCC>
