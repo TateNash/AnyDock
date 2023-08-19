@@ -12,6 +12,18 @@
         "qdockwidget": "cpp",
         "memory": "cpp",
         "qlcdnumber": "cpp",
-        "qwidget": "cpp"
+        "qwidget": "cpp",
+        "qapplication": "cpp",
+        "qmouseevent": "cpp",
+        "qfileiconprovider": "cpp",
+        "xiosbase": "cpp",
+        "qhboxlayout": "cpp",
+        "qguiapplication": "cpp",
+        "qmenu": "cpp",
+        "chrono": "cpp",
+        "variant": "cpp",
+        "qpushbutton": "cpp",
+        "qtoolbutton": "cpp",
+        "qpoint": "cpp"
     }
 }

@@ -3,9 +3,13 @@
 
 #include <QtWidgets/QMainWindow>
 #include "ui_anydock.h"
+#include <QListWidget>
 #include <memory> 
 
 class TimePlugin;
+class ListWidget;
+class QHBoxLayout;
+class QPoint;
 
 namespace Ui {
 class AnyDock;
@@ -20,20 +24,27 @@ public:
 
 private:
     void InitMainWindows();
+    void InitListWidget();
     void InitPara();
 
 protected:
-    void closeEvent(QCloseEvent *event);
     void contextMenuEvent(QContextMenuEvent* event);
+    void dragEnterEvent(QDragEnterEvent *event) override;
+    void dropEvent(QDropEvent *event) override;
+    void onShortcutItemDoubleClicked(QListWidgetItem *item);
+    void paintEvent(QPaintEvent *event);
 
 private slots:
-    void createDigitalClock();
 
 private:
     Ui::AnyDock ui;
 
-    std::unique_ptr<QMenu> m_menu;
+    QMenu *m_menu;
     TimePlugin *m_time;
+    QHBoxLayout *m_shortcutLayout;
+
+    const int m_screenWidth;
+    const int m_screenHeight;
 };
 
 #endif // ANYDOCK_H

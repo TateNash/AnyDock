@@ -3,7 +3,7 @@
 
 #include <QObject>
 #include <QWidget>
-#include <QMouseEvent>
+#include <QMenu>
 
 class MouseDragger : public QObject
 {
@@ -19,6 +19,7 @@ private:
     QWidget *m_targetWidget;
     bool m_isDragging;
     QPoint m_dragOffset;
+    QMenu *m_menu;
 };
 
 #endif // MOUSEDRAGGER_H

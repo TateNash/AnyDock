@@ -19,7 +19,6 @@ file(GLOB UI_FILES "${CMAKE_CURRENT_SOURCE_DIR}/ui/*.ui")
 qt6_wrap_cpp(MOC_SOURCES ${MOC_FILES})
 qt6_wrap_ui(UI_HEADERS ${UI_FILES})
 
-
 set(RESOURCES
     res/anydock.qrc
 )

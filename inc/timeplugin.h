@@ -3,21 +3,26 @@
 
 #include <QtWidgets/QWidget>
 
-class QLabel;
-class QTimer;
+#include <QLabel>
+#include <QTimer>
+#include <QMenu>
 
 class TimePlugin : public QWidget
 { 
     Q_OBJECT
 public:
     TimePlugin(QWidget *parent = nullptr);
+
+private:
+    void InitMenu();
     
 private slots:
     void updateTime();
     
 private:
-    QLabel *timeLabel;
-    QTimer *timer;
+    QLabel *m_timeLabel;
+    QTimer *m_timer;
+    QMenu *m_menu;
 };
 
 #endif // TIMEPLUGIN_H
