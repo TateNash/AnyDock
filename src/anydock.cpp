@@ -1,6 +1,8 @@
 #include "anydock.h"
 #include "timeplugin.h"
 #include "mousedragger.h"
+#include "common_define.h"
+
 #include <QDockWidget>
 #include <QScreen>
 #include <QSystemTrayIcon>
@@ -14,6 +16,7 @@
 #include <QDir>
 #include <QLabel>
 #include <QPainter>
+#include <QPixmap>
 #include <QPoint>
 #include <QDesktopServices>
 #include <QFileIconProvider>
@@ -21,6 +24,26 @@
 #include <QListView>
 #include <QToolButton>
 #include <QDrag>
+#include <QUrl>
+#include <windows.h>
+#include <shlobj.h>
+#include <shlwapi.h>
+#include <QSettings>
+
+#include <fstream>
+#include <boost/throw_exception.hpp>
+#include <boost/property_tree/ptree.hpp>
+#include <boost/property_tree/ini_parser.hpp>
+
+namespace boost {
+    void throw_exception(std::exception const& e) {
+        qDebug() << "BoosetThrow: " << e.what();
+    }
+
+    void throw_exception(std::exception const& e, boost::source_location const& loc) {
+        qDebug() << "BoosetThrow: " << e.what() << " at " << loc.file_name() << ":" << loc.line();
+    }
+}
 
 AnyDock::AnyDock(QWidget *parent)
     : QMainWindow(parent), 
@@ -120,15 +143,41 @@ void AnyDock::dropEvent(QDropEvent *event)
     foreach(QUrl url, urls) 
     {
         QString filePath = url.toLocalFile();
-        QFileIconProvider iconProvider;
-        QIcon icon = iconProvider.icon(QFileInfo(filePath));
-        QString targetFilePath = QFileInfo(filePath).symLinkTarget();
+        QFileInfo fileInfo(filePath);
+        QIcon icon;
+        
+        if (fileInfo.suffix().toLower() == "lnk")
+        {
+            QFileIconProvider iconProvider;
+            icon = iconProvider.icon(fileInfo);
+        }
+        else if (fileInfo.suffix().toLower() == "url")
+        {
+            boost::property_tree::ptree pt;
+            boost::property_tree::ini_parser::read_ini(filePath.toLocal8Bit().constData(), pt);
+            QString iconFile = QString::fromStdString(pt.get<std::string>("InternetShortcut.IconFile", "default_icon.ico"));
+            if (iconFile != "default_icon.ico")
+            {
+                if (iconFile.contains(".exe"))
+                {
+                    QFileInfo fileInfo(iconFile);
+                    QFileIconProvider iconProvider;
+                    icon = iconProvider.icon(fileInfo);
+                }
+                else if (iconFile.contains(".ico"))
+                {
+                    icon.addFile(iconFile);
+                }
+            }  
+        }
+
+        QString targetFilePath = fileInfo.symLinkTarget();
 
         // 创建一个新的QToolButton并设置图标和文字
         QToolButton *button = new QToolButton;
         button->setIcon(icon);
         button->setIconSize(QSize(50, 50)); // 设置图标大小
-        button->setText(QFileInfo(filePath).completeBaseName());
+        button->setText(fileInfo.completeBaseName());
         button->setToolTip(targetFilePath); // 设置鼠标悬停时显示的快捷方式路径
         button->setToolButtonStyle(Qt::ToolButtonTextUnderIcon); // 将文字放在图标的下方
         button->setStyleSheet("text-align: center;"); // 将文字居中对齐
@@ -141,11 +190,4 @@ void AnyDock::dropEvent(QDropEvent *event)
         // 添加到布局中
         m_shortcutLayout->addWidget(button);
     }
-}
-
-
-void AnyDock::onShortcutItemDoubleClicked(QListWidgetItem *item)
-{
-    QString shortcutFilePath = item->data(Qt::UserRole).toString();
-    QDesktopServices::openUrl(QUrl::fromLocalFile(shortcutFilePath));
 }

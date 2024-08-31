@@ -31,7 +31,6 @@ protected:
     void contextMenuEvent(QContextMenuEvent* event);
     void dragEnterEvent(QDragEnterEvent *event) override;
     void dropEvent(QDropEvent *event) override;
-    void onShortcutItemDoubleClicked(QListWidgetItem *item);
     void paintEvent(QPaintEvent *event);
 
 private slots:
